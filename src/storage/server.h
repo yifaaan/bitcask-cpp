@@ -45,7 +45,6 @@ namespace cl
 
         bool Flush();
         bool Sync();
-        bool Close();
 
     private:
         std::string filename_;
