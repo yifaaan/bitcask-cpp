@@ -22,7 +22,6 @@ namespace cl
         LogRecord() = default;
         LogRecord(int fd, uint64_t offset, uint64_t size);
 
-    public:
         /// 该记录所处的文件
         int fd_{};
         /// 文件内的偏移位置
@@ -44,13 +43,18 @@ namespace cl
         /// 获取
         std::optional<std::string> Get(const std::string& key);
 
+        bool Flush();
+        bool Sync();
+        bool Close();
+
     private:
         std::string filename_;
         /// 内存索引表
         std::unordered_map<std::string, LogRecord> key_dir_;
         std::unordered_map<uint64_t, std::string>  open_files_;
         /// 活跃数据文件描述符
-        int fd_;
+        int         fd_;
+        std::string data_;
         /// 活跃数据文件的id
         uint64_t          active_file_id_{};
         uint64_t          offset_{};

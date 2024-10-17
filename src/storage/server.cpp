@@ -116,4 +116,28 @@ namespace cl
         }
         return "haha";
     }
+
+    bool Db::Flush()
+    {
+        auto res = write(fd_, data_.c_str(), data_.size());
+        if (res == -1)
+        {
+            std::cerr << "write error\n";
+            return false;
+        }
+        std::cout << "success write " << res << " bytes\n";
+        return true;
+    }
+
+    bool Db::Sync()
+    {
+        Flush();
+        return fsync(fd_) == -1 ? false : true;
+    }
+
+    bool Db::Close()
+    {
+        close(fd_);
+        return true;
+    }
 } // namespace cl
