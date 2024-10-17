@@ -1,5 +1,5 @@
 #include "server.h"
-#include "../utils/common.h"
+#include "common.h"
 #include <algorithm>
 #include <cstdint>
 #include <cstdio>
