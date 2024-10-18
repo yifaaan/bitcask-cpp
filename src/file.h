@@ -4,6 +4,7 @@
 #include <dirent.h>
 #include <memory>
 #include <sys/stat.h>
+#include <vector>
 
 namespace db
 {
@@ -17,7 +18,7 @@ namespace db
         return fp;
     }
 
-    // 读取size个对象
+    /// 读size个字节
     inline void fread_safe(void* ptr, size_t size, FILE* stream)
     {
         if (size == 0) return;
@@ -27,13 +28,13 @@ namespace db
         }
     }
 
-    /// 写入size个对象
+    /// 写入size个字节
     inline void fwrite_safe(const void* buf, size_t size, FILE* fp)
     {
         if (size == 0) return;
         if (!fwrite(buf, size, 1, fp))
         {
-            throw_io_exception("read file failed");
+            throw_io_exception("write file failed");
         }
     }
 
@@ -89,4 +90,25 @@ namespace db
             throw_io_exception("read file failed ");
         }
     }
+
+    using FileHandler = std::shared_ptr<FILE>;
+
+    /// 根据目录和文件名构造出文件的完整路径
+    std::string file_path(const std::string& dir, const std::string& filename);
+
+    /// 返回该目录下的所有文件路径
+    std::vector<std::string> GetAllFiles(const std::string& dir);
+
+    FileHandler OpenFile(const std::string& filename);
+
+    /// 写入每个元素大小为size字节的buf，返回写入之前的文件偏移
+    long WriteFile(const void* buf, size_t size, FILE* fp);
+
+    // 从文件读取size个字节
+    bool ReadFile(FILE* fp, void* buf, size_t size);
+    // 从文件读取size个字节
+    std::string ReadFile(FILE* fp, size_t size);
+    // 从文件offset处读取size个字节
+    std::string ReadFile(FILE* fp, uint32_t offset, size_t size);
+
 } // namespace db

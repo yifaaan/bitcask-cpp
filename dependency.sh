@@ -47,13 +47,14 @@ function build_project()
     shift 1
     PROJECT_OPT=$*
     NAME=${PROJECT}-build
+    cd build/
     mkdir -p ${NAME} && cd ${NAME}
     # 如crc32c库 会安装到 bitcask-cpp/third_party/中
-    echo "cmake ${PROJECT_OPT} -DCMAKE_INSTALL_PREFIX=../../ ../${PROJECT}"
-    cmake ${PROJECT_OPT} -DCMAKE_INSTALL_PREFIX=../../ ../${PROJECT}
+    echo "cmake ${PROJECT_OPT} -DCMAKE_INSTALL_PREFIX=../../ ../../${PROJECT}"
+    cmake ${PROJECT_OPT} -DCMAKE_INSTALL_PREFIX=../../ ../../${PROJECT}
     echo "make VERBOSE=1 && make install"
     make VERBOSE=1 && make install
-    cd ../
+    cd ../../
 }
 
 function clear_build_history()
@@ -71,8 +72,8 @@ function make_dep()
     PROJECT_NAME=$2
     shift 2
     PROJECT_OPT=$*
-    mkdir -p build && cd build/
-
+    # mkdir -p build && cd build/
+    mkdir -p build
     echo "clone/update ${PROJECT_NAME} from ${PROJECT_URL}..."
     clone_or_update_from_git ${PROJECT_URL} ${PROJECT_NAME} 
 
