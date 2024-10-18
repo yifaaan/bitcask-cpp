@@ -3,6 +3,7 @@
 #include <cstdio>
 #include <dirent.h>
 #include <memory>
+#include <string_view>
 #include <sys/stat.h>
 #include <vector>
 
@@ -21,7 +22,8 @@ namespace db
     /// 读size个字节
     inline void fread_safe(void* ptr, size_t size, FILE* stream)
     {
-        if (size == 0) return;
+        if (size == 0)
+            return;
         if (!fread(ptr, size, 1, stream) && !feof(stream))
         {
             throw_io_exception("read file failed");
@@ -31,7 +33,8 @@ namespace db
     /// 写入size个字节
     inline void fwrite_safe(const void* buf, size_t size, FILE* fp)
     {
-        if (size == 0) return;
+        if (size == 0)
+            return;
         if (!fwrite(buf, size, 1, fp))
         {
             throw_io_exception("write file failed");
@@ -91,15 +94,13 @@ namespace db
         }
     }
 
-    using FileHandler = std::shared_ptr<FILE>;
-
     /// 根据目录和文件名构造出文件的完整路径
     std::string file_path(const std::string& dir, const std::string& filename);
 
     /// 返回该目录下的所有文件路径
     std::vector<std::string> GetAllFiles(const std::string& dir);
 
-    FileHandler OpenFile(const std::string& filename);
+    std::shared_ptr<FILE> OpenFile(const std::string_view filename);
 
     /// 写入每个元素大小为size字节的buf，返回写入之前的文件偏移
     long WriteFile(const void* buf, size_t size, FILE* fp);

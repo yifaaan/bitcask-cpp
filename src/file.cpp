@@ -1,9 +1,11 @@
-#include "exception/io_exception.h"
 #include "file.h"
 #include "easylogging++.h"
+#include "exception/io_exception.h"
 
 #include <cstdio>
+#include <memory>
 #include <string>
+#include <string_view>
 #include <sys/stat.h>
 #include <vector>
 
@@ -23,7 +25,7 @@ namespace db
 
     std::vector<std::string> GetAllFiles(const std::string& dir)
     {
-        dirent*     ptr;
+        dirent* ptr;
         struct stat statbuf;
         // 打开目录
         auto dir_p = opendir_safe(dir.data());
@@ -32,7 +34,8 @@ namespace db
         while ((ptr = readdir(dir_p)) != nullptr)
         {
             // 掠过 . 和 .. 目录
-            if (ptr->d_name[0] == '.') continue;
+            if (ptr->d_name[0] == '.')
+                continue;
             // 构造出文件路径名
             std::string filename = file_path(dir, ptr->d_name);
             stat_safe(filename.data(), &statbuf);
@@ -46,11 +49,11 @@ namespace db
         return files;
     }
 
-    FileHandler OpenFile(const std::string& filename)
+    std::shared_ptr<FILE> OpenFile(const std::string_view filename)
     {
         LOG(INFO) << "open file" << filename;
         auto fp = fopen_safe(filename.data(), "a+b");
-        return FileHandler(fp, std::fclose);
+        return std::shared_ptr<FILE>(fp, std::fclose);
     }
 
     long WriteFile(const void* buf, size_t size, FILE* fp)
@@ -66,7 +69,8 @@ namespace db
 
     bool ReadFile(FILE* fp, void* buf, size_t size)
     {
-        if (size == 0) return true;
+        if (size == 0)
+            return true;
         if (feof(fp))
         {
             // LOG(TRACE) << "feof";
