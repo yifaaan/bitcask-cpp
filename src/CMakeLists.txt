@@ -1,10 +1,19 @@
-add_executable(dbserver main.cpp file.cpp
-record.cpp)
+add_executable(dbserver 
+main.cpp file.cpp
+record.cpp
+active_file.cpp
+active_map.cpp
+record.cpp
+record_map.cpp
+stable_file.cpp
+)
 
 add_subdirectory(storage)
 add_subdirectory(utils)
 
-
+# header only
+# add_library(cache INTERFACE)
+# target_include_directories(cache INTERFACE .)
 
 # 添加 third_party 目录中包含的头文件路径
 target_include_directories(dbserver 
@@ -13,6 +22,7 @@ PUBLIC
 PUBLIC
     ${PROJECT_SOURCE_DIR}/include
 )
+
 
 
 
@@ -28,6 +38,8 @@ PRIVATE
     ${crc}
     PRIVATE
     ${el}
+    # PRIVATE
+    # cache
 )
 
 

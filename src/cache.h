@@ -18,7 +18,7 @@ class Cache {
   explicit Cache(size_t max_size) : max_size_{max_size} {}
 
   /// 插入新缓存项
-  void emplace(const K &key, const V &value) {
+  void emplace(const K& key, const V& value) {
     /// 插入到队列头，表示最近使用过
     cache_items_list_.push_front(KeyValuePair{key, value});
     /// 存在旧的就删除
@@ -39,7 +39,7 @@ class Cache {
   }
 
   /// 查找缓存项
-  const Value &lookup(const K &key) {
+  const Value& lookup(const K& key) {
     if (auto it = cache_items_map_.find(key); it != cache_items_map_.end()) {
       // 将list中的该项移动到list的开头
       cache_items_list_.splice(cache_items_list_.begin(), cache_items_list_,
@@ -50,7 +50,7 @@ class Cache {
     }
   }
 
-  bool contains(const K &key) const { return cache_items_map_.contains(key); }
+  bool contains(const K& key) const { return cache_items_map_.contains(key); }
 
   size_t size() const { return cache_items_map_.size(); }
 

@@ -1,44 +1,35 @@
 #pragma once
 
-#include "easylogging++.h"
 #include <atomic>
 #include <cstdint>
-namespace db
-{
-    /// 统计缓存命中率的类
-    class CacheMetrics
-    {
-      public:
-        CacheMetrics() = default;
 
-        CacheMetrics(const CacheMetrics&)            = delete;
-        CacheMetrics& operator=(const CacheMetrics&) = delete;
+#include "easylogging++.h"
+namespace db {
+/// 统计缓存命中率的类
+class CacheMetrics {
+ public:
+  CacheMetrics() = default;
 
-        ~CacheMetrics()
-        {
-            uint64_t hit   = hit_;
-            uint64_t miss  = miss_;
-            uint64_t total = hit + miss;
+  CacheMetrics(const CacheMetrics&) = delete;
+  CacheMetrics& operator=(const CacheMetrics&) = delete;
 
-            if (total == 0)
-                total = 1;
-            LOG(INFO) << "cache total call: " << total;
-            LOG(INFO) << "cache miss call: " << miss;
-            LOG(INFO) << "cache hit/total: " << ((double)hit) / total;
-        }
+  ~CacheMetrics() {
+    uint64_t hit = hit_;
+    uint64_t miss = miss_;
+    uint64_t total = hit + miss;
 
-        void Hit()
-        {
-            hit_.fetch_add(1, std::memory_order_relaxed);
-        }
+    if (total == 0) total = 1;
+    LOG(INFO) << "cache total call: " << total;
+    LOG(INFO) << "cache miss call: " << miss;
+    LOG(INFO) << "cache hit/total: " << ((double)hit) / total;
+  }
 
-        void Miss()
-        {
-            miss_.fetch_add(1, std::memory_order_relaxed);
-        }
+  void Hit() { hit_.fetch_add(1, std::memory_order_relaxed); }
 
-      private:
-        std::atomic<uint64_t> hit_{};
-        std::atomic<uint64_t> miss_{};
-    };
-} // namespace db
+  void Miss() { miss_.fetch_add(1, std::memory_order_relaxed); }
+
+ private:
+  std::atomic<uint64_t> hit_{};
+  std::atomic<uint64_t> miss_{};
+};
+}  // namespace db

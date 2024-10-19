@@ -1,45 +1,49 @@
-#include "record.h"
-#include "server.h"
+#include <cstdio>
+#include <iostream>
+#include <string>
+
+#include "cache.h"
+#include "cache_metrics.h"
+#include "crc32.h"
+#include "easylogging++.h"
+#include "fcntl.h"
 #include "file.h"
 #include "gtest/gtest.h"
-#include "crc32.h"
-#include "fcntl.h"
-#include "easylogging++.h"
-
-#include <cstdio>
-#include <string>
-#include <iostream>
+#include "record.h"
+#include "server.h"
+#include "stable_file.h"
 INITIALIZE_EASYLOGGINGPP
 // Demonstrate some basic assertions.
-TEST(dbserver, BasicAssertions)
-{
-    using db::Key;
-    using db::Value;
+TEST(dbserver, BasicAssertions) {
+  // using db::Key;
+  // using db::Value;
 
-    Key   key1   = "Liuyifan";
-    Value value1 = "2024-hello-world";
+  // Key key1     = "Liuyifan";
+  // Value value1 = "2024-hello-world";
 
-    auto f = db::OpenFile("0.data");
+  // auto f = db::OpenFile("0.data");
 
-    auto info1 = db::WriteRecord(key1, value1, f.get());
-    fflush(f.get());
-    auto f2 = db::OpenFile("0.data");
+  // auto info1 = db::WriteRecord(key1, value1, f.get());
+  // fflush(f.get());
+  // auto f2 = db::OpenFile("0.data");
 
-    db::RecordInfo info2;
-    Key            key2;
-    Value          value2;
+  // db::RecordInfo info2;
+  // Key key2;
+  // Value value2;
 
-    auto r = db::ReadRecord(info2, key2, value2, f2.get());
-
-    LOG(TRACE) << r;
-    // std::cout << ret << std::endl;
-    // Expect two strings not to be equal.
-    // EXPECT_STRNE("hello", "world");
-    // Expect equality.
-    // uint8_t a[3] = {1, 2, 3};
-    // std::cout << crc32c::Extend(0, a, 3);
-    // LOG(INFO) << "Log using default file";
-    // EXPECT_EQ(info1.size_, info2.size_);
+  // auto r = db::ReadRecord(info2, key2, value2, f2.get());
+  db::CacheMetrics cache;
+  db::Cache<db::Key, db::Value> ca{123};
+  db::StableFile f{nullptr, cache};
+  LOG(TRACE) << "test";
+  // std::cout << ret << std::endl;
+  // Expect two strings not to be equal.
+  // EXPECT_STRNE("hello", "world");
+  // Expect equality.
+  // uint8_t a[3] = {1, 2, 3};
+  // std::cout << crc32c::Extend(0, a, 3);
+  // LOG(INFO) << "Log using default file";
+  // EXPECT_EQ(info1.size_, info2.size_);
 }
 
 // int main()
