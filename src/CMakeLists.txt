@@ -1,10 +1,11 @@
 add_executable(dbserver 
-main.cpp file.cpp
-record.cpp
+main.cpp 
 active_file.cpp
 active_map.cpp
-record.cpp
+bitcask.cpp
+file.cpp
 record_map.cpp
+record.cpp
 stable_file.cpp
 )
 
