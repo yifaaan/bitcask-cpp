@@ -29,7 +29,8 @@ std::vector<std::string> GetAllFiles(const std::string& dir) {
   std::vector<std::string> files;
   while ((ptr = readdir(dir_p)) != nullptr) {
     // 掠过 . 和 .. 目录
-    if (ptr->d_name[0] == '.') continue;
+    if (ptr->d_name[0] == '.')
+      continue;
     // 构造出文件路径名
     std::string filename = file_path(dir, ptr->d_name);
     stat_safe(filename.data(), &statbuf);
@@ -58,7 +59,8 @@ long WriteFile(const void* buf, size_t size, FILE* fp) {
 }
 
 bool ReadFile(FILE* fp, void* buf, size_t size) {
-  if (size == 0) return true;
+  if (size == 0)
+    return true;
   if (feof(fp)) {
     // LOG(TRACE) << "feof";
     return false;
@@ -80,4 +82,4 @@ std::string ReadFile(FILE* fp, uint32_t offset, size_t size) {
   fread_safe(content.data(), size, fp);
   return content;
 }
-}  // namespace db
+} // namespace db

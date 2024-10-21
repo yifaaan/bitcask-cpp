@@ -4,7 +4,7 @@ CMAKE_CXX_OPT=""
 # crc32c
 GCRC32_URL='https://github.com/google/crc32c.git'
 GCRC32_PATH='crc32c'
-GCRC32_BUILD_OPT="${CMAKE_CXX_OPT}"
+GCRC32_BUILD_OPT="${CMAKE_CXX_OPT} -DCRC32C_BUILD_TESTS=OFF -DCRC32C_BUILD_BENCHMARKS=OFF -DCRC32C_USE_GLOG=OFF -DCRC32C_INSTALL=ON"
 
 # google test
 GTEST_URL='https://github.com/google/googletest.git'

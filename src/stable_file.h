@@ -12,7 +12,7 @@
 namespace db {
 /// 数据文件
 class StableFile {
- public:
+public:
   explicit StableFile(std::shared_ptr<FILE> file, CacheMetrics& metrics);
   ~StableFile() = default;
 
@@ -28,7 +28,7 @@ class StableFile {
   /// 从指定偏移处读对应的value
   Value Read(const Key& key, uint32_t offset, uint32_t size);
 
- private:
+private:
   mutable std::mutex mutex_;
   std::shared_ptr<FILE> file_;
   /// 缓存命中统计
@@ -36,4 +36,4 @@ class StableFile {
   /// 每个数据文件对应一个LRU缓存
   Cache<db::Key, db::Value> cache_;
 };
-}  // namespace db
+} // namespace db

@@ -10,14 +10,16 @@ function clone_or_update_from_git()
     if [ ! -d ${DIR} ]; then
         echo "git clone ${GIT_REPO_URL} ${DIR}"
         git clone ${GIT_REPO_URL} ${DIR}
-    else
-        # 当前工作目录压入栈中,切换到DIR目录
-        pushd ${DIR}
-        echo "git pull origin master"
-        git pull origin master
-        # 切换到栈顶目录
-        popd
     fi
+    # else
+    #     # 当前工作目录压入栈中,切换到DIR目录
+    #     pushd ${DIR}
+    #     echo "git pull origin master"
+    #     git pull origin master
+    #     # 切换到栈顶目录
+    #     popd
+    # fi
+
 }
 
 function clone_or_update_from_git_with_submodule()
@@ -30,14 +32,15 @@ function clone_or_update_from_git_with_submodule()
         git clone ${GIT_REPO_URL} ${DIR}
         git submodule init
         git submodule update
-    else
-        pushd ${DIR}
-        echo "git pull origin master"
-        git pull origin master
-        git submodule init
-        git submodule update
-        popd
     fi
+    # else
+    #     pushd ${DIR}
+    #     echo "git pull origin master"
+    #     git pull origin master
+    #     git submodule init
+    #     git submodule update
+    #     popd
+    # fi
 }
 
 # args: project-name opts
@@ -47,14 +50,16 @@ function build_project()
     shift 1
     PROJECT_OPT=$*
     NAME=${PROJECT}-build
-    cd build/
+    echo "in build_project"
+    # pwd -> third_party/build
     mkdir -p ${NAME} && cd ${NAME}
+    # pwd -> third_party/build/crc32c-build
     # 如crc32c库 会安装到 bitcask-cpp/third_party/中
-    echo "cmake ${PROJECT_OPT} -DCMAKE_INSTALL_PREFIX=../../ ../../${PROJECT}"
-    cmake ${PROJECT_OPT} -DCMAKE_INSTALL_PREFIX=../../ ../../${PROJECT}
+    echo "cmake ${PROJECT_OPT} -DCMAKE_INSTALL_PREFIX=../../ ../${PROJECT}"
+    cmake ${PROJECT_OPT} -DCMAKE_INSTALL_PREFIX=../../ ../${PROJECT}
     echo "make VERBOSE=1 && make install"
     make VERBOSE=1 && make install
-    cd ../../
+    cd ../
 }
 
 function clear_build_history()
@@ -72,9 +77,9 @@ function make_dep()
     PROJECT_NAME=$2
     shift 2
     PROJECT_OPT=$*
-    # mkdir -p build && cd build/
-    mkdir -p build
-    echo "clone/update ${PROJECT_NAME} from ${PROJECT_URL}..."
+    mkdir -p build && cd build
+    # mkdir -p build
+    echo "clone/update ${PROJECT_NAME} from ${PROJECT_URL}... into $(pwd)/${PROJECT_NAME}"
     clone_or_update_from_git ${PROJECT_URL} ${PROJECT_NAME} 
 
     echo "build ${PROJECT_NAME}..."

@@ -27,4 +27,4 @@ void ActiveMap::Put(const Key& key, const Value& value) {
 void ActiveMap::Remove(const Key& key) { map_.erase(key); }
 
 void ActiveMap::Clear() { map_.clear(); }
-}  // namespace db
+} // namespace db

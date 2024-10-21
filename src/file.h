@@ -20,7 +20,8 @@ inline FILE* fopen_safe(const char* filename, const char* mode) {
 
 /// 读size个字节
 inline void fread_safe(void* ptr, size_t size, FILE* stream) {
-  if (size == 0) return;
+  if (size == 0)
+    return;
   if (!fread(ptr, size, 1, stream) && !feof(stream)) {
     throw_io_exception("read file failed");
   }
@@ -28,7 +29,8 @@ inline void fread_safe(void* ptr, size_t size, FILE* stream) {
 
 /// 写入size个字节
 inline void fwrite_safe(const void* buf, size_t size, FILE* fp) {
-  if (size == 0) return;
+  if (size == 0)
+    return;
   if (!fwrite(buf, size, 1, fp)) {
     throw_io_exception("write file failed");
   }
@@ -93,4 +95,4 @@ std::string ReadFile(FILE* fp, size_t size);
 // 从文件offset处读取size个字节
 std::string ReadFile(FILE* fp, uint32_t offset, size_t size);
 
-}  // namespace db
+} // namespace db

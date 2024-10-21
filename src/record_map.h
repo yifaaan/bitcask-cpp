@@ -7,8 +7,9 @@
 #include "libcuckoo/cuckoohash_map.hh"
 
 namespace db {
+/// 所有数据的内存索引(key, HintRecord)
 class RecordMap {
- public:
+public:
   explicit RecordMap() = default;
   ~RecordMap() = default;
 
@@ -28,7 +29,7 @@ class RecordMap {
   ///
   void Clear();
 
- private:
+private:
   libcuckoo::cuckoohash_map<Key, HintRecord> map_;
 };
-}  // namespace db
+} // namespace db

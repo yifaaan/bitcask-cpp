@@ -13,7 +13,7 @@ namespace db {
 
 /// 活跃数据文件
 class ActiveFile {
- public:
+public:
   explicit ActiveFile(std::shared_ptr<FILE> file);
   ~ActiveFile() = default;
 
@@ -22,19 +22,19 @@ class ActiveFile {
 
   /// 创建一个活跃数据文件对象
   static std::shared_ptr<ActiveFile> Create(std::string_view filename);
-  /// 从对应的文件加载活跃数据文件对象
+  /// 加载活跃数据文件，并构建活跃数据内存索引
   static std::shared_ptr<ActiveFile> Restore(size_t file_id,
                                              const std::string_view filename,
                                              RecordMap& record_map,
                                              ActiveMap& map);
 
-  /// 追加写入一条记录
+  /// 追加写入一条记录,返回其value的文件偏移
   uint32_t Wirte(const Key& key, const Value& value);
   /// 获得活跃数据文件对应的文件指针
   std::shared_ptr<FILE> Rotate();
   void Sync();
 
- private:
+private:
   std::shared_ptr<FILE> file_;
 };
-}  // namespace db
+} // namespace db

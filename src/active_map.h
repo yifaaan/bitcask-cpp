@@ -5,8 +5,9 @@
 #include "libcuckoo/cuckoohash_map.hh"
 #include "record.h"
 namespace db {
+/// 活跃数据文件的内存索引,(key, value)
 class ActiveMap {
- public:
+public:
   explicit ActiveMap() = default;
   ~ActiveMap() = default;
 
@@ -19,7 +20,7 @@ class ActiveMap {
   void Remove(const Key& key);
   void Clear();
 
- private:
+private:
   libcuckoo::cuckoohash_map<Key, Value> map_;
 };
-}  // namespace db
+} // namespace db
