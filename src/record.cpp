@@ -101,8 +101,7 @@ void ReadAllRecords(FILE* fp, ReadRecordCallback callback) {
     callback(key, value, info);
     cnt++;
   }
-  must_eof(fp);
-
   LOG(INFO) << "read " << cnt << " record from a file";
+  must_eof(fp);
 }
-}  // namespace db
+} // namespace db

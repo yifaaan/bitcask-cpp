@@ -61,13 +61,15 @@ long WriteFile(const void* buf, size_t size, FILE* fp) {
 bool ReadFile(FILE* fp, void* buf, size_t size) {
   if (size == 0)
     return true;
+
+  // LOG(TRACE) << "before read safe";
+  fread_safe(buf, size, fp);
+  // LOG(TRACE) << "after read safe";
+
   if (feof(fp)) {
     // LOG(TRACE) << "feof";
     return false;
   }
-  // LOG(TRACE) << "before read safe";
-  fread_safe(buf, size, fp);
-  // LOG(TRACE) << "after read safe";
 
   return true;
 }
