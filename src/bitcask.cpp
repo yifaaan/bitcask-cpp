@@ -68,6 +68,7 @@ Bitcask::Bitcask(const std::string& dir, const Option& opts)
   auto files = FilterDBFiles(GetAllFiles(dir));
   if (files.empty()) {
     // 当前目录是空的，创建一个id=0的活跃数据文件
+    LOG(DEBUG) << "Create Active File";
     CreateActiveFile();
   } else {
     // 存在数据文件，需要加载
@@ -108,15 +109,16 @@ void Bitcask::RestoreFiles(std::vector<std::string>& files) {
 }
 
 std::optional<Value> Bitcask::Get(const Key& key) {
-  // 先在非活跃数据内存索引查询
+  // 内存索引查询
   auto option = record_map_.Get(key);
   if (!option) {
     return std::nullopt;
   }
 
   auto& record = *option;
-  // 读锁
+  // 读锁，因为写文件的线程会修改stable_file_handlers_
   auto lock = std::shared_lock{mutex_};
+  // 如果在活跃数据文件中
   if (record.file_id_ == NextFileId()) {
     lock.unlock();
     auto value = active_map_.Get(key);
@@ -198,9 +200,7 @@ void Bitcask::CommitWrites(std::vector<Write>& writes) {
                                  stable_handlers.begin(),
                                  stable_handlers.end());
     // 更新当前活跃数据文件
-    active_file_handler_ =
-
-        active_handler;
+    active_file_handler_ = active_handler;
   }
 
   // 如果产生了新的活跃数据文件，就需要清空之前的旧索引

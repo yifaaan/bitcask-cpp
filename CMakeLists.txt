@@ -17,7 +17,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS true)
 #添加一个包含 CMakeLists.txt 的子目录
 add_subdirectory(src)
 #添加一个包含 CMakeLists.txt 的子目录
-# add_subdirectory(tests)
+add_subdirectory(tests)
 
 
 # third_party

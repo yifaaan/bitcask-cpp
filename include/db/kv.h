@@ -8,6 +8,7 @@
 namespace db {
 class Db {
 public:
+  /// dir必须存在
   static Db Create(const std::string& dir, const Option& opts);
   ~Db() = default;
 
